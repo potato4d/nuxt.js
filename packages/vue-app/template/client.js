@@ -671,6 +671,15 @@ async function mountApp(__app) {
     })
   }
 
+  const dispatchBuiltInAction = () => {
+    // Dispatch nuxtClientInit Action
+    if (_app.$store) {
+      if ('nuxtClientInit' in _app.$store._actions) {
+        _app.$store.dispatch('nuxtClientInit')
+      }
+    }
+  }
+
   // Enable transitions
   _app.setTransitions = _app.$options.nuxt.setTransitions.bind(_app)
   if (Components.length) {
@@ -698,6 +707,7 @@ async function mountApp(__app) {
     showNextPage.call(_app, router.currentRoute)
     // Don't call fixPrepatch.call(_app, router.currentRoute, router.currentRoute) since it's first render
     mount()
+    dispatchBuiltInAction()
   }
 
   render.call(_app, router.currentRoute, router.currentRoute, (path) => {
