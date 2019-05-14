@@ -14,6 +14,7 @@ import { NuxtConfigurationServer } from './server'
 import { NuxtConfigurationServerMiddleware } from './server-middleware'
 import { NuxtConfigurationVueConfiguration } from './vue-configuration'
 import { NuxtConfigurationWatchers } from './watchers'
+import { NuxtConfigurationLogs } from './logs'
 
 type ExtendableConfiguration = { [key: string]: any }
 
@@ -49,6 +50,7 @@ export default interface NuxtConfiguration extends ExtendableConfiguration {
   'vue.config'?: NuxtConfigurationVueConfiguration
   watch?: string[]
   watchers?: NuxtConfigurationWatchers
+  logs: NuxtConfigurationLogs
 }
 
 export {

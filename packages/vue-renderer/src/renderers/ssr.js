@@ -39,19 +39,25 @@ export default class SSRRenderer extends BaseRenderer {
   }
 
   async devRenderToString(renderContext) {
-    const logs = []
-    const devReporter = {
-      log(logObj) {
-        if (logObj.args[0] instanceof Error) {
-          logObj.args[0] = logObj.args[0].stack
+    if (this.options.logs && !this.options.logs.ignoreDevSSR) {
+      const logs = []
+      const devReporter = {
+        log(logObj) {
+          if (logObj.args[0] instanceof Error) {
+            logObj.args[0] = logObj.args[0].stack
+          }
+          logs.push(logObj)
         }
-        logs.push(logObj)
       }
+      consola.addReporter(devReporter)
     }
-    consola.addReporter(devReporter)
+
     const APP = await this.vueRenderer.renderToString(renderContext)
-    consola.removeReporter(devReporter)
-    renderContext.nuxt.logs = logs
+
+    if (this.options.logs && !this.options.logs.ignoreDevSSR) {
+      consola.removeReporter(devReporter)
+      renderContext.nuxt.logs = logs
+    }
 
     return APP
   }
